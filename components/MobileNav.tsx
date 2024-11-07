@@ -2,7 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from "./ui/sheet";
 import { sidebarLinks } from "../constants";
 import { cn } from "../lib/utils";
 
@@ -21,6 +27,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
           />
         </SheetTrigger>
         <SheetContent side="left" className="border-none bg-white">
+          <SheetTitle className="invisible">Navigation</SheetTitle>
           <Link
             href="/"
             className="cursor-pointer items-center gap-1 px-4 flex"
