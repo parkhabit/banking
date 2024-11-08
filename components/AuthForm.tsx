@@ -14,6 +14,7 @@ import { Form } from "./ui/form";
 import { authFormSchema } from "../lib/utils";
 import CustomInput from "./CustomInput";
 import { getLoggedInUser, signIn, signUp } from "../lib/actions/user.actions";
+import PlaidLink from "./PlaidLink";
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
@@ -33,8 +34,21 @@ const AuthForm = ({ type }: { type: string }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
+      const userData = {
+        firstName: data.firstName!,
+        lastName: data.lastName!,
+        address1: data.address1!,
+        city: data.city!,
+        state: data.state!,
+        postalCode: data.postalCode!,
+        dateOfBirth: data.dateOfBirth!,
+        ssn: data.ssn!,
+        email: data.email,
+        password: data.password,
+      };
+
       if (type === "sign-up") {
-        const newUser = await signUp(data);
+        const newUser = await signUp(userData);
         setUser(newUser);
       }
 
@@ -79,7 +93,9 @@ const AuthForm = ({ type }: { type: string }) => {
         </div>
       </header>
       {user ? (
-        <div className="flex flex-col gap-4">{/* plaid link component */}</div>
+        <div className="flex flex-col gap-4">
+          <PlaidLink user={user} variant="primary" />
+        </div>
       ) : (
         <>
           <Form {...form}>
@@ -120,23 +136,32 @@ const AuthForm = ({ type }: { type: string }) => {
                       control={form.control}
                       name="state"
                       label="State"
-                      placeholder="Example: NSW"
+                      placeholder="Example: NJ"
                     />
 
                     <CustomInput
                       control={form.control}
-                      name="postcode"
+                      name="postalCode"
                       label="Postcode"
-                      placeholder="Example: 2515"
+                      placeholder="Example: 12345"
                     />
                   </div>
 
-                  <CustomInput
-                    control={form.control}
-                    name="dob"
-                    label="Date of Birth"
-                    placeholder="DD-MM-YYYY"
-                  />
+                  <div className="flex gap-4">
+                    <CustomInput
+                      control={form.control}
+                      name="dateOfBirth"
+                      label="Date of Birth"
+                      placeholder="YYYY-MM-DD"
+                    />
+
+                    <CustomInput
+                      control={form.control}
+                      name="ssn"
+                      label="SSN"
+                      placeholder="Example: 1234"
+                    />
+                  </div>
                 </>
               )}
               <CustomInput
